@@ -1,0 +1,6 @@
+.articlesContainer {
+    @apply flex justify-around
+}
+.titleArticle {
+    @apply font-bold m-1 hover:text-orangehoverarticle-100 duration-300
+}

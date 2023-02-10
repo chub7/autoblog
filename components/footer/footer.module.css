@@ -1,0 +1,13 @@
+
+.headerContainer {
+   @apply flex justify-between
+}
+.contactContainer {
+   @apply p-2 m-2
+}
+.navigationContainer {
+   @apply bg-gray-800 text-white
+}
+.navigation {
+   @apply flex justify-around h-12 items-center
+}
