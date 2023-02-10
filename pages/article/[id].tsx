@@ -11,16 +11,18 @@ import {COMMENTS} from "@/constants/comments";
 import {urlBuilder} from "@/utils/build-srs";
 import ReactMarkdown from "react-markdown";
 import {getAllArticles} from "@/cms/operations/get-all-articles";
+import {getExactArticle} from "@/cms/operations/get-exact-article";
+import {getLatestArticles} from "@/cms/operations/get-latest-articles";
 
 
-const Article = ({article, articles}: InferGetStaticPropsType<typeof getStaticProps>) => {
+const Article = ({article, latestArticles}: InferGetStaticPropsType<typeof getStaticProps>) => {
 
     return (
         <div className={styles.container}>
             <div className={styles.mainColumn}>
                 <div className={styles.currentArticle}>
-                    <div className={styles.titleArticle}>{article.attributes.title}</div>
-                    <ReactMarkdown className={styles.bodyText}>{article.attributes.body}</ReactMarkdown>
+                    <div className={styles.titleArticle}>{article.article.data.attributes.title}</div>
+                    <ReactMarkdown className={styles.bodyText}>{article.article.data.attributes.body}</ReactMarkdown>
                 </div>
                 <div className={styles.socialMedia}>
                     <Image className={styles.socialIcon} src={vk} alt={`vk`} width={48} height={48}/>
@@ -29,12 +31,12 @@ const Article = ({article, articles}: InferGetStaticPropsType<typeof getStaticPr
                     <Image className={styles.socialIcon} src={linked} alt={`linked`} width={48} height={48}/>
                 </div>
                 <p className={styles.offerLatestArticles}>Вам также может быть интересно</p>
-                <div className={styles.interestingArticles}>{articles.articles.data.slice(-4).map(article => {
+                <div className={styles.interestingArticles}>{latestArticles.articles.data.map(article => {
                     return (
                         <div key={article.id} className={styles.lastArticles}>
                             <div className={styles.containerImage}>
-                            <Image src={urlBuilder(article.attributes.coverImg.data?.attributes?.url)}
-                                   alt="article cover" fill className="m-1"/></div>
+                                <Image src={urlBuilder(article.attributes.coverImg.data.attributes.url)}
+                                       alt="article cover" fill className="m-1"/></div>
                             <Link href={`${PATH.ARTICLE}${article.id}`}><h3
                                 className={styles.titleArticle}>{article.attributes.title}</h3></Link>
                             <p className="m-1">{article.attributes.body.slice(0, 80)}</p>
@@ -61,13 +63,15 @@ const Article = ({article, articles}: InferGetStaticPropsType<typeof getStaticPr
 
 export const getStaticProps = async (context: GetStaticPropsContext<{ id: string[] }>) => {
     const {id} = context.params!;
-    const articles = await getAllArticles()
-    const articleGraphQl = articles.articles.data.filter(article => +article.id === +id)
+
+    const latestArticles = await getLatestArticles(4, 4)
+    const article = await getExactArticle(+id)
 
     return {
         props: {
-            article: {...articleGraphQl[0]},
-            articles: articles,
+            latestArticles,
+            article: article,
+
         }
     }
 }

@@ -7,7 +7,7 @@ import ImageSlider from "@/components/slider/slider";
 import styles from "./index.module.css"
 import {ARTICLES_PER_PAGE} from "@/constants/pagination";
 import {urlBuilder} from "@/utils/build-srs";
-import {getAllArticles, getArticles} from "@/cms/operations/get-all-articles";
+import {getArticles} from "@/cms/operations/get-articles-for-pagination";
 
 
 
@@ -33,14 +33,14 @@ export default function Home({articlesPerPage, articles}: InferGetStaticPropsTyp
                             </div>)
                     })}
                 </div>
-                <Pagination countOfArticles={articles.articles.data.length} countArticlesPerPage={articlesPerPage}/>
+                <Pagination countOfArticles={articles.articles.meta.pagination.total} countArticlesPerPage={articlesPerPage}/>
             </main>
         )
 }
 
 
 export const getStaticProps = async () => {
-    const articles  = await getArticles(1,2)
+    const articles  = await getArticles()
 
     return {
         props: {

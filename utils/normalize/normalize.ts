@@ -1,4 +1,5 @@
-import {GetAllQuery} from "@/generated/schema";
+import {GetAllQuery, GetArticlesForPaginationQuery, GetExactArticleQuery} from "@/generated/schema";
+import {getExactArticle} from "@/cms/operations/get-exact-article";
 
 // export const normalizeArticle= (articles: ArticleTypeOptionalsFields) : ArticleTypeRequiredFields  => {
 //     const { id,attributes,} = articles
@@ -47,19 +48,19 @@ type DataRequiredCoverImgType = {
 }
 type AttributesRequiredCoverImgType = { __typename?: "UploadFile"; url: string }
 
-const normalizeAttributesCoverImg = (attributesCoverImg: AttributesRequiredCoverImgType) : AttributesRequiredCoverImgType => {
+const normalizeAttributesCoverImg = (attributesCoverImg: any) : AttributesRequiredCoverImgType => {
     return {
         url: attributesCoverImg.url || ``
     }
 }
 
-const normalizeDataCoverImg = (dataCoverImg: DataRequiredCoverImgType) : DataRequiredCoverImgType  => {
+const normalizeDataCoverImg = (dataCoverImg: any) : DataRequiredCoverImgType  => {
     return {
         attributes: normalizeAttributesCoverImg(dataCoverImg.attributes)
     }
 }
 
-const normalizeCoverImg = (coverImg: ArticleRequiredCoverImgType): ArticleRequiredCoverImgType => {
+const normalizeCoverImg = (coverImg: any): ArticleRequiredCoverImgType => {
     return {
         data: normalizeDataCoverImg(coverImg.data)
     }
@@ -95,9 +96,51 @@ export const normalizeGetAllArticles = (data: GetAllQuery): GetAllRequiredQueryT
     }
 }
 
+// normalizeGetArticlesForPagination
+export type GetArticlesForPaginationRequiredQueryTyped = {
+    __typename?: "Query";
+    articles: {
+        __typename?: "ArticleEntityResponseCollection";
+        data: Array<ArticleRequiredType>
+        meta: { pagination: { __typename?: "Pagination"; total: number } }
+    }
+};
 
+export const normalizeGetArticlesForPagination = (data: GetArticlesForPaginationQuery): GetArticlesForPaginationRequiredQueryTyped => {
 
+    return {
+        ...data,
+        articles: {
+            ...data.articles,
+            data: data.articles?.data.map(element => {
+                return normalizeArticle(element)
+            }) || [emptyObjForNormalizeGetAllArticles],
+            meta: data.articles? {...data.articles.meta} : {pagination: { total: 1} }
+        }
+    }
+}
+// normalizeGetArticlesForPagination
 
+//normalizeGetExactArticle
+
+export type GetExactArticleRequiredQueryTyped = {
+    __typename?: "Query";
+    article: {
+        __typename?: "ArticleEntityResponseCollection";
+        data: ArticleRequiredType
+    }
+};
+
+export const normalizeGetExactArticle = (data: GetExactArticleQuery): GetExactArticleRequiredQueryTyped => {
+
+    return {
+        ...data,
+        article: {
+            data: normalizeArticle(data.article?.data) || [emptyObjForNormalizeGetAllArticles]
+        }
+    }
+}
+//normalizeGetExactArticle
 
 
 const emptyObjForNormalizeGetAllArticles = {

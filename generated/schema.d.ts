@@ -954,6 +954,66 @@ export type GetAllQuery = {
   };
 };
 
+export type GetArticlesForPaginationQueryVariables = Exact<{
+  page?: InputMaybe<Scalars["Int"]>;
+  pageSize?: InputMaybe<Scalars["Int"]>;
+}>;
 
+export type GetArticlesForPaginationQuery = {
+  __typename?: "Query";
+  articles?: {
+    __typename?: "ArticleEntityResponseCollection";
+    meta: {
+      __typename?: "ResponseCollectionMeta";
+      pagination: { __typename?: "Pagination"; total: number };
+    };
+    data: Array<{
+      __typename?: "ArticleEntity";
+      id?: string;
+      attributes?: {
+        __typename?: "Article";
+        title: string;
+        body: string;
+        chapter: string;
+        addedDate: string;
+        coverImg: {
+          __typename?: "UploadFileEntityResponse";
+          data?: {
+            __typename?: "UploadFileEntity";
+            attributes?: { __typename?: "UploadFile"; url: string };
+          };
+        };
+      };
+    }>;
+  };
+};
 
+export type GetExactArticleQueryVariables = Exact<{
+  id?: InputMaybe<Scalars["ID"]>;
+}>;
 
+export type GetExactArticleQuery = {
+  __typename?: "Query";
+  article?: {
+    __typename?: "ArticleEntityResponse";
+    data?: {
+      __typename?: "ArticleEntity";
+      id?: string;
+      attributes?: {
+        __typename?: "Article";
+        title: string;
+        body: string;
+        chapter: string;
+        addedDate: string;
+        coverImg: {
+          __typename?: "UploadFileEntityResponse";
+          data?: {
+            __typename?: "UploadFileEntity";
+            id?: string;
+            attributes?: { __typename?: "UploadFile"; url: string };
+          };
+        };
+      };
+    };
+  };
+};
