@@ -1,6 +1,6 @@
 import {gql} from "@apollo/client";
 import {GetAllQuery} from "@/generated/schema";
-import {normalizeGetAllArticles} from "@/utils/normalize/normalize";
+import {normalizeGetAllArticles} from "@/utils/normalize/normalize-get-all-articles";
 import {queryGetLatestArticles} from "@/cms/queies/get-latest-articles";
 import {apolloClient} from "@/cms/operations/apollo-client";
 

@@ -10,7 +10,7 @@ import {PATH} from "@/constants/path";
 import {SLIDER_DELAY} from "@/constants/slider";
 import {urlBuilder} from "@/utils/build-srs";
 import Image from "next/image";
-import {GetAllRequiredQueryTyped} from "@/utils/normalize/normalize";
+import {GetAllRequiredQueryTyped} from "@/utils/normalize/normalize-get-all-articles";
 
 
 const ImageSlider = ({articles}: GetAllRequiredQueryTyped) => {
