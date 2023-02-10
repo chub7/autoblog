@@ -1,0 +1,18 @@
+.containerArticles {
+    @apply flex flex-wrap justify-around m-1
+}
+.eachArticle {
+    @apply  m-5 w-400 h-300 overflow-hidden
+}
+.coverArticle {
+    @apply m-1
+}
+.titleArticle {
+    @apply font-bold m-1 hover:text-orangehoverarticle-100 duration-300
+}
+.descriptionArticle {
+    @apply m-1  overflow-hidden text-ellipsis
+}
+.coverImageArticle {
+    @apply  relative w-full h-40
+}

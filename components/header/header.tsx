@@ -7,19 +7,26 @@ import styles from "./header.module.css"
 const Header = () => {
     return (
         <header>
-            <div>
+            <div className={styles.headerContainer}>
                 <div>
-                    <Image src={Logo} alt="Logo" className={styles.logo}/>
+                    <Image src={Logo} alt="Logo" width="300" height="65"/>
                 </div>
-                <div>
+                <div className={styles.contactContainer}>
                     <Link href={PATH.HOME}>Связь с редакцией</Link>
-                    <Link href={PATH.HOME}>info@autoblog.by</Link>
-                    <input type={"text"}/>
+                    <Link className="m-2" href={PATH.HOME}>info@autoblog.by</Link>
+                    <input  type={"text"} className="border border-black" placeholder={'search'}/>
                 </div>
             </div>
-            <nav>
-                <Link href={PATH.HOME}>Home</Link>
-            </nav>
+            <div className={styles.navigationContainer}>
+                <nav className={styles.navigation}>
+                    <Link className={styles.navigationLink} href={PATH.HOME}>Главная</Link>
+                    <Link className={styles.navigationLink} href={PATH.HOME}>Автомобили</Link>
+                    <Link className={styles.navigationLink} href={PATH.HOME}>Автоновости</Link>
+                    <Link className={styles.navigationLink} href={PATH.HOME}>Статьи</Link>
+                    <Link className={styles.navigationLink} href={PATH.HOME}>Информация</Link>
+                </nav>
+            </div>
+
         </header>
     )
 }

@@ -1,9 +1,4 @@
-export const usePage = (currentPage: string[], articlesPerPage: number, countArticles: number) => {
-
-    // const lastArticle = Number(currentPage[0]) * articlesPerPage
-    // const startArticle = lastArticle > countArticles+1
-    //     ? lastArticle - Number(currentPage[0]) + 1
-    //     : lastArticle - Number(currentPage[0])
+export const useArticlesSelect = (currentPage: string[], articlesPerPage: number) => {
 
     const bufResult = Number(currentPage[0]) * articlesPerPage
     const lastArticle = bufResult

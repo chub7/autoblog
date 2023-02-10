@@ -1,6 +1,60 @@
-.articlesContainer {
-    @apply flex justify-around
+.container {
+    @apply flex flex-row justify-between
+}
+.currentArticle{
+    @apply m-10
+}
+.socialMedia {
+    @apply border-4 border-black border-opacity-10 p-2 flex justify-center
+}
+.socialIcon {
+    @apply ml-2
+}
+.offerLatestArticles {
+    @apply flex justify-center font-bold text-xl
+}
+.interestingArticles{
+    @apply flex flex-wrap justify-center m-1
 }
 .titleArticle {
     @apply font-bold m-1 hover:text-orangehoverarticle-100 duration-300
+}
+.rightColumn{
+    @apply w-min mt-5
+}
+.searchInput {
+    @apply border border-black
+}
+.ulCustom {
+    @apply leading-6 mt-0.5 ml-0 mr-0 mb-1.5 p-0
+}
+.eachLi {
+    @apply relative pl-5 border-b
+    before:absolute
+    before:left-0
+    before:top-2.5
+    before:h-1
+    before:w-1
+    before:border-orangehoverarticle-100
+    before:border-t
+    before:border-r
+    before:border-b-0
+    before:border-l-0
+    before:rotate-45
+}
+.commentLink {
+    @apply break-all text-blue-500 hover:text-blue-800
+}
+.mainColumn {
+    @apply w-2/3
+}
+
+.bodyText li {
+    @apply list-disc list-outside
+}
+.containerImage {
+    @apply relative w-full h-40
+}
+.lastArticles {
+    @apply m-5 w-300
 }

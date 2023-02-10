@@ -1,6 +1,5 @@
-import {gql} from "@apollo/client";
-
-export const getAllArticles = gql`query getAll {
+export const getAllArticles = /* GraphQL */ `
+query getAll {
   articles {
     data {
       id
@@ -9,7 +8,15 @@ export const getAllArticles = gql`query getAll {
         body
         chapter
         addedDate
+        coverImg {
+          data {
+            attributes{
+              url
+            }
+          }
+        }       
       }
     }
   }
-}`
+}
+`

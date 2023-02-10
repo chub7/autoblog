@@ -23,15 +23,15 @@ export type Scalars = {
 
 export type Article = {
   __typename?: "Article";
-  addedDate?: Maybe<Scalars["String"]>;
-  body?: Maybe<Scalars["String"]>;
-  chapter?: Maybe<Scalars["String"]>;
-  coverImg?: Maybe<UploadFileEntityResponse>;
+  addedDate: Scalars["String"];
+  body: Scalars["String"];
+  chapter: Scalars["String"];
+  coverImg: UploadFileEntityResponse;
   createdAt?: Maybe<Scalars["DateTime"]>;
   publishedAt?: Maybe<Scalars["DateTime"]>;
-  shortDescriptionArticle?: Maybe<Scalars["String"]>;
-  shotDescriptionLength?: Maybe<Scalars["Int"]>;
-  title?: Maybe<Scalars["String"]>;
+  shortDescriptionArticle: Scalars["String"];
+  shotDescriptionLength: Scalars["Int"];
+  title: Scalars["String"];
   updatedAt?: Maybe<Scalars["DateTime"]>;
 };
 
@@ -938,11 +938,11 @@ export type GetAllQuery = {
       id?: string;
       attributes?: {
         __typename?: "Article";
-        title?: string;
-        body?: string;
-        chapter?: string;
-        addedDate?: string;
-        coverImg?: {
+        title: string;
+        body: string;
+        chapter: string;
+        addedDate: string;
+        coverImg: {
           __typename?: "UploadFileEntityResponse";
           data?: {
             __typename?: "UploadFileEntity";
@@ -953,3 +953,5 @@ export type GetAllQuery = {
     }>;
   };
 };
+
+

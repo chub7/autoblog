@@ -1,7 +1,8 @@
+import styles from "./footer.module.css"
 const Footer =()=>{
     return(
-        <footer>
-            Copyright 2023 - Burgers
+        <footer className={styles.footerContainer}>
+            Copyright 2023 - AutoBlog
         </footer>
     )
 }

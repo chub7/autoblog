@@ -1,0 +1,16 @@
+overwrite: true
+schema:
+  - ${STRAPI_API_URL}:
+      headers:
+        Authorization: 'Basic ${STRAPI_API_TOKEN}'
+documents: './cms/**/*.ts'
+generates:
+  generated/schema.d.ts:
+    plugins:
+      - 'typescript'
+      - 'typescript-operations'
+    config:
+      maybeValue: T
+hooks:
+  afterAllFileWrite:
+    - 'prettier --write'

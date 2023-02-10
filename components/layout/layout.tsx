@@ -1,6 +1,7 @@
 import React from "react";
-import Footer from "@/components/footer";
+import Footer from "@/components/footer/footer";
 import Header from "@/components/header/header";
+import styles from "./layout.module.css"
 
 type LayoutPropsType = {
     children: React.ReactNode
@@ -8,7 +9,7 @@ type LayoutPropsType = {
 
 const Layout = ({children} : LayoutPropsType) => {
     return (
-        <div className="w-4/5 m-auto">
+        <div className={styles.layoutContainer}>
             <Header />
             {children}
             <Footer />

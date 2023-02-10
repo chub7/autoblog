@@ -1,3 +1,16 @@
-.logo{
-    @apply w-18.75 h-4
+
+.headerContainer {
+   @apply flex justify-between mb-5 mt-2
+}
+.contactContainer {
+   @apply p-2 m-2
+}
+.navigationContainer {
+   @apply bg-gray-800 text-white
+}
+.navigation {
+   @apply flex justify-around h-12 items-center
+}
+.navigationLink {
+   @apply  h-full p-2.5 hover:bg-gray-700
 }
