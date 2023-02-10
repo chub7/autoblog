@@ -6,21 +6,18 @@ import {Pagination} from "@/components/pagination/pagination";
 import ImageSlider from "@/components/slider/slider";
 import styles from "./index.module.css"
 import {ARTICLES_PER_PAGE} from "@/constants/pagination";
-import {ApolloClient, gql, InMemoryCache} from "@apollo/client";
-
-import {GetAllQuery} from "@/generated/schema";
 import {urlBuilder} from "@/utils/build-srs";
-import {getAllArticles} from "@/cms/getAllAricles";
+import {getAllArticles, getArticles} from "@/cms/operations/get-all-articles";
+
 
 
 export default function Home({articlesPerPage, articles}: InferGetStaticPropsType<typeof getStaticProps>) {
 
-    if (articles.articles) {
         return (
             <main>
                 <ImageSlider articles={articles.articles}/>
                 <div className={styles.containerArticles}>
-                    {articles.articles?.data.slice(0, articlesPerPage).map(article => {
+                    {articles.articles.data.map(article => {
                         return (
                             <div key={article.id} className={styles.eachArticle}>
                                 <div className={styles.coverImageArticle}>
@@ -39,23 +36,15 @@ export default function Home({articlesPerPage, articles}: InferGetStaticPropsTyp
                 <Pagination countOfArticles={articles.articles.data.length} countArticlesPerPage={articlesPerPage}/>
             </main>
         )
-    }
 }
 
 
 export const getStaticProps = async () => {
-    const client = new ApolloClient({
-        uri: "http://localhost:1337/graphql",
-        cache: new InMemoryCache()
-    });
-    const {data} = await client.query<GetAllQuery>({
-        query: gql`${getAllArticles}`
-    })
-
+    const articles  = await getArticles(1,2)
 
     return {
         props: {
-            articles: data,
+            articles: articles,
             articlesPerPage: ARTICLES_PER_PAGE
         }
     }

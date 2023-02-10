@@ -1,4 +1,4 @@
-export const getAllArticles = /* GraphQL */ `
+export const queryGetAllArticles = /* GraphQL */ `
 query getAll {
   articles {
     data {

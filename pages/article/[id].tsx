@@ -1,4 +1,3 @@
-import {ARTICLES, ArticlesType} from "@/constants/articles";
 import {GetStaticPathsContext, GetStaticPropsContext, InferGetStaticPropsType} from "next";
 import styles from "@/pages/article/[id].module.css";
 import Image from "next/image";
@@ -9,12 +8,9 @@ import facebook from "../../public/social-media-icons/317752_facebook_social med
 import twitter from "../../public/social-media-icons/3225183_app_logo_media_popular_social_icon.png"
 import linked from "../../public/social-media-icons/3225190_app_linkedin_logo_media_popular_icon.png"
 import {COMMENTS} from "@/constants/comments";
-import {ApolloClient, gql, InMemoryCache} from "@apollo/client";
-import {GetAllQuery} from "@/generated/schema";
-import {getAllArticles} from "@/cms/getAllAricles";
-import {normalizeGetAll} from "@/utils/norm/normlz";
 import {urlBuilder} from "@/utils/build-srs";
 import ReactMarkdown from "react-markdown";
+import {getAllArticles} from "@/cms/operations/get-all-articles";
 
 
 const Article = ({article, articles}: InferGetStaticPropsType<typeof getStaticProps>) => {
@@ -63,41 +59,22 @@ const Article = ({article, articles}: InferGetStaticPropsType<typeof getStaticPr
     )
 }
 
-
-
-
-
 export const getStaticProps = async (context: GetStaticPropsContext<{ id: string[] }>) => {
     const {id} = context.params!;
-    const client = new ApolloClient({
-        uri: "http://localhost:1337/graphql",
-        cache: new InMemoryCache()
-    });
-    const {data} = await client.query<GetAllQuery>({
-        query: gql`${getAllArticles}`
-    })
-
-    const articlesGraphQl = normalizeGetAll(data)
-    const articleGraphQl = articlesGraphQl.articles.data.filter(article => +article.id === +id)
+    const articles = await getAllArticles()
+    const articleGraphQl = articles.articles.data.filter(article => +article.id === +id)
 
     return {
         props: {
             article: {...articleGraphQl[0]},
-            articles: articlesGraphQl,
+            articles: articles,
         }
     }
 }
 
 export const getStaticPaths = async (context: GetStaticPathsContext) => {
-    const client = new ApolloClient({
-        uri: "http://localhost:1337/graphql",
-        cache: new InMemoryCache()
-    });
-    const {data} = await client.query<GetAllQuery>({
-        query: gql`${getAllArticles}`
-    })
-    const graphQlArtiles = normalizeGetAll(data)
-    const paths = graphQlArtiles.articles.data.map(article => {
+    const articles = await getAllArticles()
+    const paths = articles.articles.data.map(article => {
         return {
             params: {id: article.id.toString()}
         }
