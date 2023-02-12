@@ -1,5 +1,6 @@
 import {GetArticlesForPaginationQuery} from "@/generated/schema";
-import {ArticleRequiredType, emptyObjForNormalizeGetAllArticles, normalizeArticle} from "@/utils/normalize/normalize-get-all-articles";
+import { emptyObjForNormalizeGetAllArticles, normalizeArticle} from "@/utils/normalize/normalize-get-all-articles";
+import {ArticleRequiredType} from "@/utils/normalize/types";
 
 export type GetArticlesForPaginationRequiredQueryTyped = {
     __typename?: "Query";
