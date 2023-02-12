@@ -1,59 +1,39 @@
 import {GetAllQuery} from "@/generated/schema";
+import {
+    ArticleRequiredAttributesType,
+    ArticleRequiredCoverImgType, ArticleRequiredType,
+    AttributesRequiredCoverImgType, DataRequiredCoverImgType, GetAllRequiredQueryTyped,
+    ArticleOptionalType,
+    AttributesArticleOptionalType,
+    CoverImgOptionalType,
+    CoverImgDataOptionalType,
+    CoverImgDataAttributesOptionalType
+} from "@/utils/normalize/types";
 
 
-export type GetAllRequiredQueryTyped = {
-    __typename?: "Query";
-    articles: {
-        __typename?: "ArticleEntityResponseCollection";
-        data: Array<ArticleRequiredType>
-    }
-};
-
-export type ArticleRequiredType = {
-    __typename?: "ArticleEntity";
-    id: string;
-    attributes: ArticleRequiredAttributesType
-}
-
-export type ArticleRequiredAttributesType = {
-    __typename?: "Article";
-    title: string;
-    body: string;
-    chapter: string;
-    addedDate: string;
-    coverImg: ArticleRequiredCoverImgType
-}
-
-export type ArticleRequiredCoverImgType = {
-    __typename?: "UploadFileEntityResponse",
-    data: DataRequiredCoverImgType
-}
-
-export type DataRequiredCoverImgType = {
-    __typename?: "UploadFileEntity";
-    attributes: AttributesRequiredCoverImgType;
-}
-export type AttributesRequiredCoverImgType = { __typename?: "UploadFile"; url: string }
-
-export const normalizeAttributesCoverImg = (attributesCoverImg: any) : AttributesRequiredCoverImgType => {
+export const normalizeAttributesCoverImg = (attributesCoverImg: CoverImgDataAttributesOptionalType): AttributesRequiredCoverImgType => {
     return {
         url: attributesCoverImg.url || ``
     }
 }
 
-export const normalizeDataCoverImg = (dataCoverImg: any) : DataRequiredCoverImgType  => {
+export const normalizeDataCoverImg = (dataCoverImg: CoverImgDataOptionalType): DataRequiredCoverImgType => {
     return {
-        attributes: normalizeAttributesCoverImg(dataCoverImg.attributes)
+        attributes: dataCoverImg.attributes
+            ? normalizeAttributesCoverImg(dataCoverImg.attributes)
+            : emptyObjForNormalizeGetAllArticles.attributes.coverImg.data.attributes
     }
 }
 
-export const normalizeCoverImg = (coverImg: any): ArticleRequiredCoverImgType => {
+export const normalizeCoverImg = (coverImg: CoverImgOptionalType): ArticleRequiredCoverImgType => {
     return {
-        data: normalizeDataCoverImg(coverImg.data)
+        data: coverImg.data
+            ? normalizeDataCoverImg(coverImg.data)
+            : emptyObjForNormalizeGetAllArticles.attributes.coverImg.data
     }
 }
 
-export const normalizeArticleAttributes = (attributes: any): ArticleRequiredAttributesType => {
+export const normalizeArticleAttributes = (attributes: AttributesArticleOptionalType): ArticleRequiredAttributesType => {
     return {
         addedDate: attributes.addedDate || ``,
         body: attributes.body || ``,
@@ -63,10 +43,12 @@ export const normalizeArticleAttributes = (attributes: any): ArticleRequiredAttr
     }
 }
 
-export const normalizeArticle = (article: any): ArticleRequiredType => {
+export const normalizeArticle = (article: ArticleOptionalType): ArticleRequiredType => {
     return {
         id: article.id || ``,
-        attributes: normalizeArticleAttributes(article.attributes)
+        attributes: article.attributes
+            ? normalizeArticleAttributes(article.attributes)
+            : emptyObjForNormalizeGetAllArticles.attributes
     }
 }
 
@@ -82,8 +64,6 @@ export const normalizeGetAllArticles = (data: GetAllQuery): GetAllRequiredQueryT
         }
     }
 }
-
-
 
 
 
@@ -106,3 +86,14 @@ export const emptyObjForNormalizeGetAllArticles = {
 }
 
 
+// type AttributesArticle = Pick<NonNullable<NonNullable<GetAllQuery['articles']>['data'][0]['attributes']>
+//     , 'coverImg' | 'title' | 'body' | 'chapter' | 'addedDate'>
+//
+// type CoverImg = Pick<NonNullable<NonNullable<GetAllQuery['articles']>['data'][0]['attributes']>['coverImg']
+//     , 'data'>
+//
+// type CoverImgData = Pick<NonNullable<NonNullable<NonNullable<GetAllQuery['articles']>['data'][0]['attributes']>['coverImg']['data']>
+//     , 'attributes'>
+//
+// type CoverImgDataAttributes = Pick<NonNullable<NonNullable<NonNullable<NonNullable<GetAllQuery['articles']>['data'][0]['attributes']>['coverImg']['data']>['attributes']>
+//     , 'url'>

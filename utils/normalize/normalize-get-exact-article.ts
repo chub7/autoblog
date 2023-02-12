@@ -14,8 +14,9 @@ export const normalizeGetExactArticle = (data: GetExactArticleQuery): GetExactAr
     return {
         ...data,
         article: {
-            data: normalizeArticle(data.article?.data) || [emptyObjForNormalizeGetAllArticles]
+            data: data.article?.data
+                ? normalizeArticle(data.article?.data)
+                : emptyObjForNormalizeGetAllArticles
         }
     }
 }
-//normalizeGetExactArticle
