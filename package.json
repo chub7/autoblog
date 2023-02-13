@@ -8,6 +8,7 @@
     "start": "next start",
     "lint": "next lint",
     "generate:definitions": "cross-env DEBUG=1 DOTENV_CONFIG_PATH=.env.local graphql-codegen -r dotenv/config --config codegen.yml"
+
   },
   "dependencies": {
     "@apollo/client": "^3.7.7",

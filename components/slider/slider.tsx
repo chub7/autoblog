@@ -1,26 +1,20 @@
 import React from "react";
 import {Swiper, SwiperSlide} from 'swiper/react';
-import SwiperCore, {Pagination, Navigation, Autoplay} from "swiper";
+import SwiperCore, {Autoplay, Navigation, Pagination} from "swiper";
 import "swiper/css";
 import "swiper/css/pagination";
 import "swiper/css/navigation";
-import {ArticlesType} from "@/constants/articles";
 import styles from "./slider.module.css"
-import pic from "../../public/articlesImg/bmw-mers-330x140.jpg"
 import Link from "next/link";
 import {PATH} from "@/constants/path";
 import {SLIDER_DELAY} from "@/constants/slider";
-import {GetAllQuery} from "@/generated/schema";
 import {urlBuilder} from "@/utils/build-srs";
 import Image from "next/image";
+import {GetAllRequiredQueryTyped} from "@/utils/normalize/normalize-get-all-articles";
 
 
-// type ImageSliderType = {
-//     articles: ArticlesType[]
-// }
-const ImageSlider = ({articles}: GetAllQuery) => {
+const ImageSlider = ({articles}: GetAllRequiredQueryTyped) => {
     SwiperCore.use([Autoplay])
-    if(articles)
     return (
         <Swiper navigation={true}
                 autoplay={{delay: SLIDER_DELAY}}
@@ -29,7 +23,6 @@ const ImageSlider = ({articles}: GetAllQuery) => {
         >
             {articles.data.map(article => {
                 return (
-
                     <SwiperSlide key={article.id} className={styles.slideBackground}>
                         <Image src={urlBuilder(article.attributes?.coverImg?.data?.attributes?.url)} alt={`cover slider`} fill  />
                         <Link href={`${PATH.ARTICLE}${article.id}`}>
@@ -44,7 +37,6 @@ const ImageSlider = ({articles}: GetAllQuery) => {
             })}
         </Swiper>
     )
-        return <div></div>
 
 };
 

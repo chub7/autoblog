@@ -1,4 +1,3 @@
-import {ARTICLES, ArticlesType} from "@/constants/articles";
 import {GetStaticPathsContext, GetStaticPropsContext, InferGetStaticPropsType} from "next";
 import styles from "@/pages/article/[id].module.css";
 import Image from "next/image";
@@ -9,22 +8,21 @@ import facebook from "../../public/social-media-icons/317752_facebook_social med
 import twitter from "../../public/social-media-icons/3225183_app_logo_media_popular_social_icon.png"
 import linked from "../../public/social-media-icons/3225190_app_linkedin_logo_media_popular_icon.png"
 import {COMMENTS} from "@/constants/comments";
-import {ApolloClient, gql, InMemoryCache} from "@apollo/client";
-import {GetAllQuery} from "@/generated/schema";
-import {getAllArticles} from "@/cms/getAllAricles";
-import {normalizeGetAll} from "@/utils/norm/normlz";
 import {urlBuilder} from "@/utils/build-srs";
 import ReactMarkdown from "react-markdown";
+import {getAllArticles} from "@/cms/operations/get-all-articles";
+import {getExactArticle} from "@/cms/operations/get-exact-article";
+import {getLatestArticles} from "@/cms/operations/get-latest-articles";
 
 
-const Article = ({article, articles}: InferGetStaticPropsType<typeof getStaticProps>) => {
+const Article = ({article, latestArticles}: InferGetStaticPropsType<typeof getStaticProps>) => {
 
     return (
         <div className={styles.container}>
             <div className={styles.mainColumn}>
                 <div className={styles.currentArticle}>
-                    <div className={styles.titleArticle}>{article.attributes.title}</div>
-                    <ReactMarkdown className={styles.bodyText}>{article.attributes.body}</ReactMarkdown>
+                    <div className={styles.titleArticle}>{article.article.data.attributes.title}</div>
+                    <ReactMarkdown className={styles.bodyText}>{article.article.data.attributes.body}</ReactMarkdown>
                 </div>
                 <div className={styles.socialMedia}>
                     <Image className={styles.socialIcon} src={vk} alt={`vk`} width={48} height={48}/>
@@ -33,12 +31,12 @@ const Article = ({article, articles}: InferGetStaticPropsType<typeof getStaticPr
                     <Image className={styles.socialIcon} src={linked} alt={`linked`} width={48} height={48}/>
                 </div>
                 <p className={styles.offerLatestArticles}>Вам также может быть интересно</p>
-                <div className={styles.interestingArticles}>{articles.articles.data.slice(-4).map(article => {
+                <div className={styles.interestingArticles}>{latestArticles.articles.data.map(article => {
                     return (
                         <div key={article.id} className={styles.lastArticles}>
                             <div className={styles.containerImage}>
-                            <Image src={urlBuilder(article.attributes.coverImg.data?.attributes?.url)}
-                                   alt="article cover" fill className="m-1"/></div>
+                                <Image src={urlBuilder(article.attributes.coverImg.data.attributes.url)}
+                                       alt="article cover" fill className="m-1"/></div>
                             <Link href={`${PATH.ARTICLE}${article.id}`}><h3
                                 className={styles.titleArticle}>{article.attributes.title}</h3></Link>
                             <p className="m-1">{article.attributes.body.slice(0, 80)}</p>
@@ -63,41 +61,24 @@ const Article = ({article, articles}: InferGetStaticPropsType<typeof getStaticPr
     )
 }
 
-
-
-
-
 export const getStaticProps = async (context: GetStaticPropsContext<{ id: string[] }>) => {
     const {id} = context.params!;
-    const client = new ApolloClient({
-        uri: "http://localhost:1337/graphql",
-        cache: new InMemoryCache()
-    });
-    const {data} = await client.query<GetAllQuery>({
-        query: gql`${getAllArticles}`
-    })
 
-    const articlesGraphQl = normalizeGetAll(data)
-    const articleGraphQl = articlesGraphQl.articles.data.filter(article => +article.id === +id)
+    const latestArticles = await getLatestArticles(4, 4)
+    const article = await getExactArticle(+id)
 
     return {
         props: {
-            article: {...articleGraphQl[0]},
-            articles: articlesGraphQl,
+            latestArticles,
+            article: article,
+
         }
     }
 }
 
 export const getStaticPaths = async (context: GetStaticPathsContext) => {
-    const client = new ApolloClient({
-        uri: "http://localhost:1337/graphql",
-        cache: new InMemoryCache()
-    });
-    const {data} = await client.query<GetAllQuery>({
-        query: gql`${getAllArticles}`
-    })
-    const graphQlArtiles = normalizeGetAll(data)
-    const paths = graphQlArtiles.articles.data.map(article => {
+    const articles = await getAllArticles()
+    const paths = articles.articles.data.map(article => {
         return {
             params: {id: article.id.toString()}
         }
